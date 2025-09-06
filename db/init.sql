@@ -10,7 +10,7 @@ CREATE TABLE jobs (
     input_path TEXT NOT NULL,
     output_path TEXT,
     preset preset_type NOT NULL,
-    params JSONB NOT NULL DEFAULT '{}',
+    params TEXT NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     started_at TIMESTAMPTZ,
     expires_at TIMESTAMPTZ,
