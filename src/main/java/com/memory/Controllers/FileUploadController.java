@@ -5,6 +5,7 @@ import com.memory.Enums.PresetType;
 import com.memory.Models.Video;
 import com.memory.Repositories.VideoRepository;
 import com.memory.Utilities.HashUtilities;
+import com.memory.Utilities.StorageProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,13 @@ import java.time.OffsetDateTime;
 public class FileUploadController {
 
     private final VideoRepository videoRepository;
-    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
+    private final String UPLOAD_DIR;
+    private final int ttl;
 
-    public FileUploadController(VideoRepository videoRepository) {
+    public FileUploadController(VideoRepository videoRepository, StorageProperties storageProperties) {
         this.videoRepository = videoRepository;
+        this.UPLOAD_DIR = System.getProperty("user.dir") + storageProperties.getUploadDir();
+        this.ttl = storageProperties.getTtl();
     }
 
     @PostMapping("/upload")
@@ -49,13 +53,15 @@ public class FileUploadController {
             System.out.println(UPLOAD_DIR + filePath.getFileName());
             file.transferTo(filePath.toFile());
 
+            OffsetDateTime odt = OffsetDateTime.now();
             Video video = new Video();
-            video.setStatus(JobStatus.QUEUED);
+            video.setStatus(JobStatus.SUCCEEDED);
             video.setInputSizeBytes((long) file.getBytes().length);
             video.setInputPath(filePath.toString());
             video.setPreset(PresetType.CUSTOM);
-            video.setCreatedAt(OffsetDateTime.now());
+            video.setCreatedAt(odt);
             video.setChecksum(HashUtilities.sha256(filePath));
+            video.setExpiresAt(odt.plusSeconds(ttl));
 
             videoRepository.save(video);
 
