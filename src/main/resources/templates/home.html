@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Загрузка видео</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Загрузка видео</h1>
+
+    <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file">Выбери видео:</label>
+        <label class="file-upload">
+            <input type="file" name="file" id="file" accept=".mp4,.avi" required>
+            <span id="file-name">Нажми для выбора файла</span>
+        </label>
+        <small id="file-error"></small>
+
+        <label for="preset">Пресет:</label>
+        <select name="preset" id="preset">
+            <option value="p1">p1</option>
+            <option value="p2">p2</option>
+            <option value="p3">p3</option>
+            <option value="p4">p4</option>
+            <option value="p5">p5</option>
+            <option value="p6">p6</option>
+            <option value="p7" selected>p7</option>
+        </select>
+
+        <label for="qp">QP:</label>
+        <input type="number" name="qp" id="qp" value="19" min="15" max="23">
+
+        <button type="submit">Загрузить</button>
+
+        <div id="progress-container">
+            <div id="progress-wrapper">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="progress-text">0%</div>
+            <div id="progress-sub"></div>
+        </div>
+    </form>
+</div>
+
+<script src="/uploadScript.js"></script>
+</body>
+</html>
