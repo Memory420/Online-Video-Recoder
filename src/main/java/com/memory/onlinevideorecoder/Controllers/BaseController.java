@@ -56,7 +56,7 @@ public class BaseController {
         file.transferTo(target);
 
 
-        Video video = new Video(); // ручное тестирование
+        Video video = new Video();
         video.setInputSizeBytes(Files.size(target));
         video.setInputPath(target);
         video.setChecksum(FileChecksum.calculateSHA256(target));
